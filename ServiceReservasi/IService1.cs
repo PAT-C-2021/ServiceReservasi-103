@@ -28,6 +28,35 @@ namespace ServiceReservasi
 
         [OperationContract]
         List<Pemesanan> Pemesanan();
+
+        [OperationContract]
+        string Login(string Username, string Password);
+
+        [OperationContract]
+        string Register(string Username, string Password, string Kategori);
+
+        [OperationContract]
+        string UpdateRegister(string Username, string Password, string Kategori, int Id);
+
+        [OperationContract]
+        string DeleteRegister(string Username);
+
+        [OperationContract]
+        List<DataRegister> DataRegist();
+    }
+
+    [DataContract]
+    public class DataRegister
+    {
+        [DataMember(Order = 1)]
+        public int Id { get; set; }
+        [DataMember(Order = 2)]
+        public string Username { get; set; }
+        [DataMember(Order = 3)]
+        public string Password { get; set; }
+        [DataMember(Order =4)]
+        public string Kategori { get; set; }
+
     }
 
     [DataContract]

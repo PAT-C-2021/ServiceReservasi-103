@@ -146,5 +146,120 @@ namespace ServiceReservasi
 
             return a;
         }
+
+        public string Login(string Username, string Password)
+        {
+            string kategori = "";
+
+            string sql = "select Kategori from Login where Username='" + Username + "' and Password='" + Password + "'";
+            connection = new SqlConnection(constring);
+            com = new SqlCommand(sql, connection);
+            connection.Open();
+            SqlDataReader reader = com.ExecuteReader();
+            while (reader.Read())
+            {
+                kategori = reader.GetString(0);
+            }
+
+            return kategori;
+        }
+
+        public string Register(string Username, string Password, string Kategori)
+        {
+            try
+            {
+                string sql = "insert into Login values('" + Username + "', '" + Password + "', '" + Kategori + "')";
+                connection = new SqlConnection(constring);
+                com = new SqlCommand(sql, connection);
+                connection.Open();
+                com.ExecuteNonQuery();
+                connection.Close();
+
+                return "sukses";
+            }
+            catch (Exception e)
+            {
+                return e.ToString();
+            }
+
+        }
+
+        public string UpdateRegister(string Username, string Password, string Kategori, int Id)
+        {
+            try
+            {
+                string sql2 = "update Login SET Username='" + Username + "', Password='" + Password + "', Kategori='" + Kategori + "'" +"  where ID_login = " + Id + "";
+                connection = new SqlConnection(constring);
+                com = new SqlCommand(sql2, connection);
+                connection.Open();
+                com.ExecuteNonQuery();
+                connection.Close();
+
+                return "sukses";
+            }
+            catch (Exception e)
+            {
+                return e.ToString();
+            }
+        }
+
+        public string DeleteRegister(string Username)
+        {
+            try
+            {
+                int Id = 0;
+                string sql = "select ID_login from dbo.Login where Username = '" + Username + "'";
+                connection = new SqlConnection(constring);
+                com = new SqlCommand(sql, connection);
+                connection.Open();
+                SqlDataReader reader = com.ExecuteReader();
+                while (reader.Read())
+                {
+                    Id = reader.GetInt32(0);
+                }
+                connection.Close();
+                string sql2 = "delete from Login where ID_login=" + Id + "";
+                connection = new SqlConnection(constring);
+                com = new SqlCommand(sql2, connection);
+                connection.Open();
+                com.ExecuteNonQuery();
+                connection.Close();
+
+                return "sukses";
+            }
+            catch (Exception e)
+            {
+                return e.ToString();
+            }
+        }
+
+        public List<DataRegister> DataRegist()
+        {
+            List<DataRegister> list = new List<DataRegister>();
+            try
+            {
+                string sql = "select ID_login, Username, Password, Kategori from Login";
+                connection = new SqlConnection(constring);
+                com = new SqlCommand(sql, connection);
+                connection.Open();
+                SqlDataReader reader = com.ExecuteReader();
+                while (reader.Read())
+                {
+                    DataRegister data = new DataRegister();
+                    data.Id = reader.GetInt32(0);
+                    data.Username = reader.GetString(1);
+                    data.Password = reader.GetString(2);
+                    data.Kategori = reader.GetString(3);
+                    list.Add(data);
+                }
+                connection.Close();
+
+            }
+            catch (Exception e)
+            {
+                e.ToString();
+            }
+            return list;
+        }
     }
 }
